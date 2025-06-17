@@ -10,29 +10,34 @@ const semesterController = require('../controllers/semester.js');
  *     Semester:
  *       type: object
  *       required:
- *         - name
- *         - startDate
- *         - endDate
+ *         - year
+ *         - semesterSeason
+ *         - semesterStart
+ *         - semesterEnd
  *       properties:
  *         id:
  *           type: string
  *           description: The auto-generated id of the semester
- *         name:
+ *         year:
  *           type: string
- *           description: The name of the semester (e.g., Fall 2023)
- *         startDate:
+ *           description: The year of the semester (e.g., 2023)
+ *         semesterSeason:
+ *           type: string
+ *           description: The season of the semester (e.g., Fall, Winter, Spring, Summer)
+ *         semesterStart:
  *           type: string
  *           format: date
  *           description: The start date of the semester
- *         endDate:
+ *         semesterEnd:
  *           type: string
  *           format: date
  *           description: The end date of the semester
  *       example:
  *         id: 6527a4a42c6c5d0017000000
- *         name: Fall 2023
- *         startDate: 2023-09-01
- *         endDate: 2023-12-15
+ *         year: "2023"
+ *         semesterSeason: "Fall"
+ *         semesterStart: 2023-09-01
+ *         semesterEnd: 2023-12-15
  */
 
 /**
@@ -75,9 +80,10 @@ router.get('/', semesterController.getAll);
  *           schema:
  *             $ref: '#/components/schemas/Semester'
  *           example:
- *             name: Winter 2024
- *             startDate: 2024-01-08
- *             endDate: 2024-04-20
+ *             year: "2024"
+ *             semesterSeason: "Winter"
+ *             semesterStart: 2024-01-08
+ *             semesterEnd: 2024-04-20
  *     responses:
  *       201:
  *         description: The semester was successfully created
@@ -139,9 +145,10 @@ router.get('/:id', semesterController.getSingle);
  *           schema:
  *             $ref: '#/components/schemas/Semester'
  *           example:
- *             name: Winter 2024 (Updated)
- *             startDate: 2024-01-08
- *             endDate: 2024-04-25
+ *             year: "2024"
+ *             semesterSeason: "Winter"
+ *             semesterStart: 2024-01-08
+ *             semesterEnd: 2024-04-25
  *     responses:
  *       200:
  *         description: The semester was successfully updated

@@ -1,9 +1,9 @@
 const userController = require('../controllers/user');
-const mongodb = require('../data/database');
+const mongodb = require('../db/connect');
 const { ObjectId } = require('mongodb');
 
-jest.mock('../data/database', () => ({
-  getDatabase: jest.fn()
+jest.mock('../db/connect', () => ({
+  getDatabase: jest.fn(),
 }));
 
 describe('User Controller - GET Endpoints', () => {
@@ -13,19 +13,19 @@ describe('User Controller - GET Endpoints', () => {
     it('should return all users with status 200', async () => {
       const mockUsers = [
         { name: 'Alice', email: 'alice@example.com' },
-        { name: 'Bob', email: 'bob@example.com' }
+        { name: 'Bob', email: 'bob@example.com' },
       ];
 
       const toArray = jest.fn().mockResolvedValue(mockUsers);
       const find = jest.fn().mockReturnValue({ toArray });
       const collection = jest.fn().mockReturnValue({ find });
-      const db = jest.fn().mockReturnValue({ collection });
-      mongodb.getDatabase.mockReturnValue({ db });
+      mongodb.getDatabase.mockReturnValue({ collection });
 
       const req = {};
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
+        setHeader: jest.fn(),
       };
 
       await userController.getAll(req, res);
@@ -42,7 +42,8 @@ describe('User Controller - GET Endpoints', () => {
       const req = {};
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
+        setHeader: jest.fn(),
       };
 
       await userController.getAll(req, res);
@@ -54,18 +55,22 @@ describe('User Controller - GET Endpoints', () => {
 
   describe('getSingle', () => {
     it('should return one user with status 200', async () => {
-      const mockUser = { _id: validId, name: 'Alice', email: 'alice@example.com' };
+      const mockUser = {
+        _id: validId,
+        name: 'Alice',
+        email: 'alice@example.com',
+      };
 
       const toArray = jest.fn().mockResolvedValue([mockUser]);
       const find = jest.fn().mockReturnValue({ toArray });
       const collection = jest.fn().mockReturnValue({ find });
-      const db = jest.fn().mockReturnValue({ collection });
-      mongodb.getDatabase.mockReturnValue({ db });
+      mongodb.getDatabase.mockReturnValue({ collection });
 
       const req = { params: { id: validId } };
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
+        setHeader: jest.fn(),
       };
 
       await userController.getSingle(req, res);
@@ -78,13 +83,12 @@ describe('User Controller - GET Endpoints', () => {
       const toArray = jest.fn().mockResolvedValue([]);
       const find = jest.fn().mockReturnValue({ toArray });
       const collection = jest.fn().mockReturnValue({ find });
-      const db = jest.fn().mockReturnValue({ collection });
-      mongodb.getDatabase.mockReturnValue({ db });
+      mongodb.getDatabase.mockReturnValue({ collection });
 
       const req = { params: { id: validId } };
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
       };
 
       await userController.getSingle(req, res);
@@ -97,7 +101,7 @@ describe('User Controller - GET Endpoints', () => {
       const req = { params: { id: 'invalid-id' } };
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
+        json: jest.fn(),
       };
 
       await userController.getSingle(req, res);

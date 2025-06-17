@@ -7,9 +7,7 @@
   },
   "host": "cse341-final-i3fm.onrender.com",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/login": {
       "get": {
@@ -43,9 +41,7 @@
     },
     "/semester/": {
       "post": {
-        "tags": [
-          "semesters"
-        ],
+        "tags": ["semesters"],
         "description": "",
         "parameters": [
           {
@@ -83,9 +79,7 @@
         }
       },
       "get": {
-        "tags": [
-          "semesters"
-        ],
+        "tags": ["semesters"],
         "description": "",
         "responses": {
           "200": {
@@ -99,9 +93,7 @@
     },
     "/semester/{id}": {
       "put": {
-        "tags": [
-          "semesters"
-        ],
+        "tags": ["semesters"],
         "description": "",
         "parameters": [
           {
@@ -148,9 +140,7 @@
         }
       },
       "get": {
-        "tags": [
-          "semesters"
-        ],
+        "tags": ["semesters"],
         "description": "",
         "parameters": [
           {
@@ -173,9 +163,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "semesters"
-        ],
+        "tags": ["semesters"],
         "description": "",
         "parameters": [
           {
@@ -200,9 +188,7 @@
     },
     "/student/": {
       "get": {
-        "tags": [
-          "students"
-        ],
+        "tags": ["students"],
         "description": "",
         "responses": {
           "200": {
@@ -214,9 +200,7 @@
         }
       },
       "post": {
-        "tags": [
-          "students"
-        ],
+        "tags": ["students"],
         "description": "",
         "parameters": [
           {
@@ -262,9 +246,7 @@
     },
     "/student/{id}": {
       "get": {
-        "tags": [
-          "students"
-        ],
+        "tags": ["students"],
         "description": "",
         "parameters": [
           {
@@ -287,9 +269,7 @@
         }
       },
       "put": {
-        "tags": [
-          "students"
-        ],
+        "tags": ["students"],
         "description": "",
         "parameters": [
           {
@@ -342,9 +322,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "students"
-        ],
+        "tags": ["students"],
         "description": "",
         "parameters": [
           {
@@ -369,9 +347,7 @@
     },
     "/teacher/": {
       "get": {
-        "tags": [
-          "teachers"
-        ],
+        "tags": ["teachers"],
         "description": "Get all teachers",
         "responses": {
           "200": {
@@ -413,55 +389,53 @@
         }
       },
       "post": {
-      "tags": ["teachers"],
-      "summary": "Create a new teacher",
-      "description": "Creates a new teacher in the database.",
-      "consumes": ["application/json"],
-      "produces": ["application/json"],
-      "parameters": [
-        {
-          "in": "body",
-          "name": "body",
-          "description": "Teacher object that needs to be added",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "required": ["name", "email", "subject"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "John Smith"
-              },
-              "email": {
-                "type": "string",
-                "example": "john@example.com"
-              },
-              "subject": {
-                "type": "string",
-                "example": "Mathematics"
+        "tags": ["teachers"],
+        "summary": "Create a new teacher",
+        "description": "Creates a new teacher in the database.",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Teacher object that needs to be added",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name", "email", "subject"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "John Smith"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "john@example.com"
+                },
+                "subject": {
+                  "type": "string",
+                  "example": "Mathematics"
+                }
               }
             }
           }
-        }
-      ],
-      "responses": {
-        "201": {
-          "description": "Teacher created successfully"
-        },
-        "422": {
-          "description": "Validation failed"
-        },
-        "500": {
-          "description": "Internal server error"
+        ],
+        "responses": {
+          "201": {
+            "description": "Teacher created successfully"
+          },
+          "422": {
+            "description": "Validation failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
-    }
     },
     "/teacher/{id}": {
       "get": {
-        "tags": [
-          "teachers"
-        ],
+        "tags": ["teachers"],
         "description": "Get a single teacher by ID",
         "parameters": [
           {
@@ -564,9 +538,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "teachers"
-        ],
+        "tags": ["teachers"],
         "description": "Delete a teacher by ID",
         "parameters": [
           {
@@ -595,9 +567,7 @@
     },
     "/user/": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "description": "",
         "responses": {
           "200": {
@@ -612,9 +582,7 @@
         }
       },
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "description": "",
         "parameters": [
           {
@@ -654,9 +622,7 @@
     },
     "/user/{id}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "description": "",
         "parameters": [
           {
@@ -682,9 +648,7 @@
         }
       },
       "put": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "description": "",
         "parameters": [
           {
@@ -728,9 +692,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "description": "",
         "parameters": [
           {

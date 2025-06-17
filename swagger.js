@@ -1,16 +1,56 @@
-const swaggerAutogen = require('swagger-autogen')();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
-const doc = {
+const winston = require('winston');
+
+// Configure logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+  ],
+});
+
+// Swagger options
+const options = {
+  definition: {
+    openapi: '3.0.0',
     info: {
-        title: 'Users Api',
-        description: 'Users Api'
+      title: 'CSE 341 API Documentation',
+      version: '1.0.0',
+      description: 'API documentation for CSE 341 project',
+      license: {
+        name: 'ISC',
+        url: 'https://opensource.org/licenses/ISC',
+      },
+      contact: {
+        name: 'Developer',
+      },
     },
-    host: 'cse341-final-i3fm.onrender.com',
-    schemes: ['http', 'https']
+    servers: [
+      {
+        url: `https://cse341-final-xrc5.onrender.com`,
+        description: 'Production server',
+      },
+      {
+        url: `http://localhost:${process.env.PORT || 8080}`,
+        description: 'Development server',
+      },
+    ],
+  },
+  apis: ['./routes/*.js'],
 };
 
-const outputFile = './swagger.json';
-const endpointsFiles = ['./routes/index.js'];
+const specs = swaggerJsdoc(options);
 
-// this will generate swagger.json
-swaggerAutogen(outputFile, endpointsFiles, doc);
+module.exports = {
+  serve: swaggerUi.serve,
+  setup: swaggerUi.setup(specs),
+  logger,
+};

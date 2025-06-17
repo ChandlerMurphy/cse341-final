@@ -1,23 +1,25 @@
 function validateSemesterYear(year) {
-    return /^\d{4}$/.test(year) ? true : "Year must be a 4-digit number";
+  return /^\d{4}$/.test(year) ? true : 'Year must be a 4-digit number';
 }
 
 function validateSemesterSeason(semesterSeason) {
-    const validSeasons = ["Fall", "Winter", "Spring", "Summer"];
-    return validSeasons.includes(semesterSeason) ? true : "Semester season must be: Fall, Winter, Spring, or Summer";
+  const validSeasons = ['Fall', 'Winter', 'Spring', 'Summer'];
+  return validSeasons.includes(semesterSeason)
+    ? true
+    : 'Semester season must be: Fall, Winter, Spring, or Summer';
 }
 
 function validateSemesterStart(semesterStart) {
-    return isValidDate(semesterStart) ? true : "Semester start date is invalid";
+  return isValidDate(semesterStart) ? true : 'Semester start date is invalid';
 }
 
 function validateSemesterEnd(semesterEnd) {
-    return isValidDate(semesterEnd) ? true : "Semester end date is invalid";
+  return isValidDate(semesterEnd) ? true : 'Semester end date is invalid';
 }
 
 function isValidDate(dateString) {
-    const date = new Date(dateString);
-    return !isNaN(date.getTime());
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
 }
 
 function validateSemester(req, res, next) {
@@ -39,7 +41,7 @@ function validateSemester(req, res, next) {
     return res.status(422).json({
       success: false,
       message: 'Validation failed',
-      errors
+      errors,
     });
   }
 
@@ -47,5 +49,5 @@ function validateSemester(req, res, next) {
 }
 
 module.exports = {
-    validateSemester
+  validateSemester,
 };

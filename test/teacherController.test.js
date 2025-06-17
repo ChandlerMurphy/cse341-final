@@ -1,12 +1,12 @@
 const teacherController = require('../controllers/teacher');
-const mongodb = require('../data/database');
+const mongodb = require('../db/connect');
 const { ObjectId } = require('mongodb');
 
-jest.mock('../data/database');
+jest.mock('../db/connect');
 
 const mockJson = jest.fn();
 const mockStatus = jest.fn(() => ({ json: mockJson }));
-const mockRes = { status: mockStatus };
+const mockRes = { status: mockStatus, setHeader: jest.fn() };
 
 beforeAll(() => {
   // Suppress console.error during tests
@@ -22,13 +22,11 @@ describe('Teacher Controller - getAll', () => {
     const mockTeachers = [{ name: 'Ms. White' }, { name: 'Mr. Black' }];
 
     mongodb.getDatabase.mockReturnValue({
-      db: () => ({
-        collection: () => ({
-          find: () => ({
-            toArray: () => Promise.resolve(mockTeachers)
-          })
-        })
-      })
+      collection: () => ({
+        find: () => ({
+          toArray: () => Promise.resolve(mockTeachers),
+        }),
+      }),
     });
 
     await teacherController.getAll({}, mockRes);
@@ -55,13 +53,11 @@ describe('Teacher Controller - getSingle', () => {
     const req = { params: { id: mockTeacher._id.toHexString() } };
 
     mongodb.getDatabase.mockReturnValue({
-      db: () => ({
-        collection: () => ({
-          find: () => ({
-            toArray: () => Promise.resolve([mockTeacher])
-          })
-        })
-      })
+      collection: () => ({
+        find: () => ({
+          toArray: () => Promise.resolve([mockTeacher]),
+        }),
+      }),
     });
 
     await teacherController.getSingle(req, mockRes);
@@ -74,13 +70,11 @@ describe('Teacher Controller - getSingle', () => {
     const req = { params: { id: new ObjectId().toHexString() } };
 
     mongodb.getDatabase.mockReturnValue({
-      db: () => ({
-        collection: () => ({
-          find: () => ({
-            toArray: () => Promise.resolve([])
-          })
-        })
-      })
+      collection: () => ({
+        find: () => ({
+          toArray: () => Promise.resolve([]),
+        }),
+      }),
     });
 
     await teacherController.getSingle(req, mockRes);
@@ -95,6 +89,58 @@ describe('Teacher Controller - getSingle', () => {
     await teacherController.getSingle(req, mockRes);
 
     expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith(expect.objectContaining({ message: expect.any(String) }));
+    expect(mockJson).toHaveBeenCalledWith(
+      expect.objectContaining({ message: expect.any(String) })
+    );
+  });
+});
+
+describe('Teacher Controller - createTeacher', () => {
+  it('should create a new teacher with status 201', async () => {
+    const mockTeacher = {
+      firstName: 'Test',
+      lastName: 'Teacher',
+      email: 'test.teacher@example.com',
+      department: 'Computer Science',
+      rank: 'Professor',
+    };
+
+    mongodb.getDatabase.mockReturnValue({
+      collection: () => ({
+        insertOne: jest.fn().mockResolvedValue({ acknowledged: true, insertedId: 'someId' }),
+      }),
+    });
+
+    const req = { body: mockTeacher };
+    await teacherController.createTeacher(req, mockRes);
+
+    expect(mockStatus).toHaveBeenCalledWith(201);
+    expect(mockJson).toHaveBeenCalledWith({ acknowledged: true, insertedId: 'someId' });
+  });
+
+  it('should return 500 if teacher creation fails', async () => {
+    mongodb.getDatabase.mockReturnValue({
+      collection: () => ({
+        insertOne: jest.fn().mockResolvedValue({ acknowledged: false }),
+      }),
+    });
+
+    const req = { body: {} };
+    await teacherController.createTeacher(req, mockRes);
+
+    expect(mockStatus).toHaveBeenCalledWith(500);
+    expect(mockJson).toHaveBeenCalledWith('Some error occurred while creating the teacher.');
+  });
+
+  it('should return 500 on database error during creation', async () => {
+    mongodb.getDatabase.mockImplementation(() => {
+      throw new Error('DB connection error');
+    });
+
+    const req = { body: {} };
+    await teacherController.createTeacher(req, mockRes);
+
+    expect(mockStatus).toHaveBeenCalledWith(500);
+    expect(mockJson).toHaveBeenCalledWith({ message: 'DB connection error' });
   });
 });

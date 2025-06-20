@@ -68,7 +68,7 @@ passport.use(
 );
 
 // Swagger Documentation
-app.use('/api-docs', isAuthenticated, swagger.serve, swagger.setup);
+app.use('/api-docs', swagger.serve, swagger.setup);
 
 // Routes
 app.use('/', require('./routes'));
